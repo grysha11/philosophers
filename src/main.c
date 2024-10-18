@@ -6,31 +6,31 @@
 /*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 23:05:18 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/17 10:18:59 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/10/18 18:07:34 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-int	check_data(t_data data, int len)
+bool	check_data(t_data data, int len)
 {
 	if (!(data.amount > 0 && data.amount <= INT_MAX) || !(data.t_die > 0 && data.t_die <= INT_MAX) || !(data.t_eat > 0 && data.t_eat <= INT_MAX) || !(data.t_sleep > 0 && data.t_sleep <= INT_MAX))
 	{
 		printf("%sERROR%s: Non-numeric argument:\n\tTry: %s./philo num_of_philos time_to_die time_to_eat time_to_sleep (num_to_eat)%s\n", COLOR_RED, COLOR, COLOR_CYAN, COLOR);
-		return (FALSE);
+		return (false);
 	}
 	else if (len == 6)
 	{
 		if (!(data.cycle > 0 && data.cycle <= INT_MAX))
 		{
 			printf("%sERROR%s: Non-numeric argument:\n\tTry: %s./philo num_of_philos time_to_die time_to_eat time_to_sleep (num_to_eat)%s\n", COLOR_RED, COLOR, COLOR_CYAN, COLOR);
-			return (FALSE);
+			return (false);
 		}
 	}
-	return (TRUE);
+	return (true);
 }
 
-int	init_data(t_data *data, char **av, int len)
+bool	init_data(t_data *data, char **av, int len)
 {
 	data->amount = atoi(av[1]);
 	data->t_die = atoi(av[2]);
@@ -39,13 +39,13 @@ int	init_data(t_data *data, char **av, int len)
 	if (len == 6)
 		data->cycle = atoi(av[5]);
 	else
-		data->cycle = -1;
+		data->cycle = 1;
 	if (check_data(*data, len))
-		return (FALSE);
-	return (TRUE);
+		return (false);
+	return (true);
 }
 
-int	check_input(char **av)
+bool	check_input(char **av)
 {
 	int	i;
 	int	j;
@@ -59,13 +59,13 @@ int	check_input(char **av)
 			if (!ft_isdigit(av[i][j]))
 			{
 				printf("%sERROR%s: privetNon-numeric argument:\n\tTry: %s./philo num_of_philos time_to_die time_to_eat time_to_sleep (num_to_eat)%s\n", COLOR_RED, COLOR, COLOR_CYAN, COLOR);
-				return (FALSE);
+				return (false);
 			}
 			j++;
 		}
 		i++;
 	}
-	return (TRUE);
+	return (true);
 }
 
 int	main(int ac, char **av)

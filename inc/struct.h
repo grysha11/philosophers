@@ -6,7 +6,7 @@
 /*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 11:26:06 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/17 17:58:08 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/10/18 18:31:11 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,18 @@ typedef struct s_data
 	int				exit;
 	pthread_mutex_t	stop;
 	pthread_mutex_t	print;
+	pthread_mutex_t	forks[200];
 }				t_data;
 
 typedef struct s_philo
 {
-	int		id;
-	int		dead;
-	t_state	state;
-	t_data	*data;
+	int				id;
+	int				dead;
+	t_state			state;
+	int				fork_l;
+	int				fork_r;
+	unsigned long	start_t;
+	t_data			*data;
 }				t_philo;
 
 #endif

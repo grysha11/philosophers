@@ -3,16 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hzakharc <hzakharc@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 11:26:06 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/19 16:24:49 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/10/20 17:44:02 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STRUCT_H
 # define STRUCT_H
 # include "philo.h"
+# include <stdbool.h>
+# include <pthread.h>
+
+typedef struct s_data	t_data;
 
 typedef enum e_state
 {
@@ -30,14 +34,15 @@ typedef struct s_philo
 	int				fork_r;
 	unsigned long	start_t;
 	pthread_t		thrd;
+	t_data			*data;
 }				t_philo;
 
 typedef struct s_data
 {
 	int				amount;
-	int				t_die;
-	int				t_eat;
-	int				t_sleep;
+	size_t			t_die;
+	size_t			t_eat;
+	size_t			t_sleep;
 	int				cycle;
 	int				exit;
 	pthread_mutex_t	stop;

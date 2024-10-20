@@ -3,22 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hzakharc <hzakharc@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 09:36:47 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/20 00:10:57 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/10/20 17:45:15 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
 
+# include "struct.h"
 # include <stdlib.h>
 # include <pthread.h>
 # include <stdio.h>
 # include <sys/time.h>
+# include <unistd.h>
 # include <limits.h>
-# include "struct.h"
 # include <stdbool.h>
 
 # define TRUE 1
@@ -34,8 +35,31 @@
 // util functions
 int		ft_atoi(char const *str);
 int		ft_isdigit(int c);
+size_t	get_time(void);
 
-//main functions
+// thread functions
+bool	create_thrd(pthread_t *thread, void *routine(void *), void *arg);
+bool	join_thrd(pthread_t *thread);
+
+// mutex functions
+bool	mutex_unlock(pthread_mutex_t *mutex);
+bool	mutex_lock(pthread_mutex_t *mutex);
+bool	mutex_destroy(pthread_mutex_t *mutex);
+bool	mutex_init(pthread_mutex_t *mutex);
+
+//init functions
 void	initialize(t_data *data);
+void	init_philos(t_data *data);
+void	init_mutexes(t_data *data);
+void	join_philos(t_data *data);
+void	destroy_mutexes(t_data *data);
+
+//routine functions
+void	*routine_philo(void *arg);
+void	*routine_monitor(void *arg);
+void	print_state(t_philo *philo);
+bool	try_forks(t_philo *philo);
+void	ft_eat(t_philo *philo);
+void	ft_sleep(t_philo *philo);
 
 #endif

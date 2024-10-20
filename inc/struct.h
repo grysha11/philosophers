@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
+/*   By: hzakharc <hzakharc@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 11:26:06 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/18 18:31:11 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/10/19 16:24:49 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,17 @@ typedef enum e_state
 	THINK
 }			t_state;
 
+typedef struct s_philo
+{
+	int				id;
+	int				dead;
+	t_state			state;
+	int				fork_l;
+	int				fork_r;
+	unsigned long	start_t;
+	pthread_t		thrd;
+}				t_philo;
+
 typedef struct s_data
 {
 	int				amount;
@@ -32,17 +43,7 @@ typedef struct s_data
 	pthread_mutex_t	stop;
 	pthread_mutex_t	print;
 	pthread_mutex_t	forks[200];
+	t_philo			philos[200];
 }				t_data;
-
-typedef struct s_philo
-{
-	int				id;
-	int				dead;
-	t_state			state;
-	int				fork_l;
-	int				fork_r;
-	unsigned long	start_t;
-	t_data			*data;
-}				t_philo;
 
 #endif

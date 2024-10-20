@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
+/*   By: hzakharc <hzakharc@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 23:05:18 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/18 18:07:34 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/10/19 16:21:04 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 bool	check_data(t_data data, int len)
 {
-	if (!(data.amount > 0 && data.amount <= INT_MAX) || !(data.t_die > 0 && data.t_die <= INT_MAX) || !(data.t_eat > 0 && data.t_eat <= INT_MAX) || !(data.t_sleep > 0 && data.t_sleep <= INT_MAX))
+	if (!(data.amount > 0 && data.amount <= 200) || !(data.t_die > 0 && data.t_die <= INT_MAX) || !(data.t_eat > 0 && data.t_eat <= INT_MAX) || !(data.t_sleep > 0 && data.t_sleep <= INT_MAX))
 	{
 		printf("%sERROR%s: Non-numeric argument:\n\tTry: %s./philo num_of_philos time_to_die time_to_eat time_to_sleep (num_to_eat)%s\n", COLOR_RED, COLOR, COLOR_CYAN, COLOR);
 		return (false);
@@ -75,7 +75,7 @@ int	main(int ac, char **av)
 	if (ac == 5 || ac == 6)
 	{
 		if (check_input(av) && init_data(&data, av, ac))
-			init_loop(&data);
+			initialize(&data);
 	}
 	else
 	{

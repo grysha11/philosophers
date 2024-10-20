@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
+/*   By: hzakharc <hzakharc@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 09:36:47 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/17 10:01:13 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/10/20 00:10:57 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,6 @@ int		ft_atoi(char const *str);
 int		ft_isdigit(int c);
 
 //main functions
-void	init_loop(t_data *data);
+void	initialize(t_data *data);
 
 #endif

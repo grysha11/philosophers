@@ -3,104 +3,68 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
+/*   By: hzakharc <hzakharc@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/16 15:14:43 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/18 18:30:45 by hzakharc         ###   ########.fr       */
+/*   Created: 2024/10/19 16:17:38 by hzakharc          #+#    #+#             */
+/*   Updated: 2024/10/20 00:13:30 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-bool	dead_check(t_philo *philo)
+void	*routine_monitor(void *arg)
 {
-	if (pthread_mutex_lock(&philo->data->stop) != 0)
-		return (true);
-	pthread_mutex_unlock(&philo->data->stop);
-	return (philo->dead);
-}
+	t_data	*data;
 
-void	routine(void *arg)
-{
-	t_philo *philo;
-
-	philo = (t_philo *)arg;
-	while (dead_check(philo))
+	data = (t_data *)arg;
+	while (1)
 	{
-		//eat
-		//sleep
-		//think
+		//add the checkers for death;
 	}
 }
 
-void	init_forks(t_data *data)
+void	*routine_philo(void *arg)
 {
-	int				i;
 
-	i = 0;
-	while (i < data->amount)
-	{
-		pthread_mutex_init(&data->forks[i], NULL);
-		i++;
-	}
 }
 
-void	get_forks(t_philo *philo)
+bool	create_thrd(pthread_t *thread, void *routine(void *), void *arg)
 {
-	if (philo->id - 1 == philo->data->amount)
+	if (pthread_create(thread, NULL, routine, arg) != 0)
 	{
-		philo->fork_l = 0;
-		philo->fork_l = philo->data->amount;
+		printf("Failed to create thread\n");
+		return (false);
 	}
-	else
-	{
-		philo->fork_l = philo->id - 1;
-		philo->fork_r = philo->id;
-	}
-}
-
-unsigned long	get_time(void)
-{
-	struct timeval	time;
-	
-	gettimeofday(&time, NULL);
-	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
-}
-
-bool	init_loop(t_data *data)
-{
-	pthread_t	philo_threads[data->amount];	
-	t_philo		philos[data->amount];
-	int			i;
-
-	pthread_mutex_init(&data->print, NULL);
-	init_forks(data);
-
-	i = 0;
-	while (i < data->amount)
-	{
-		philos[i].id = i + 1;
-		philos[i].state = THINK;
-		philos[i].dead = false;
-		philos[i].data = &data;
-		get_forks(&philos[i]);
-		philos[i].start_t = get_time();
-		if (pthread_create(&philo_threads[i], NULL, routine, (void *)&philos[i]) != 0)
-		{
-			perror("Failed to create thread");
-			return (false);
-		}
-		i++;
-	}
-
-	i = 0;
-	while (i < data->amount)
-	{
-		pthread_join(philo_threads[i], NULL);
-		i++;
-	}
-	
-	pthread_mutex_destroy(&data->stop);
-	pthread_mutex_destroy(&data->print);
 	return (true);
+}
+
+bool	join_thrd(pthread_t thread)
+{
+	if (pthread_join(thread, NULL) != 0)
+	{
+		printf("Failed to join thread\n");
+		return (false);
+	}
+	return (true);
+}
+
+void	init_philos(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (i < data->amount)
+	{
+		create_thrd(&data->philos[i].thrd, routine_philo, (void *)data);
+		i++;
+	}
+}
+
+void	initialize(t_data *data)
+{
+	pthread_t	monitor;
+
+	create_thrd(&monitor, routine_monitor, (void *)data);
+	init_philos(data);
+	init_mutexes(data);
 }

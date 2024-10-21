@@ -6,7 +6,7 @@
 /*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 09:36:47 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/20 17:45:15 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/10/21 09:21:41 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,9 @@ bool	mutex_init(pthread_mutex_t *mutex);
 
 //init functions
 void	initialize(t_data *data);
-void	init_philos(t_data *data);
-void	init_mutexes(t_data *data);
-void	join_philos(t_data *data);
+bool	init_philos(t_data *data);
+bool	init_mutexes(t_data *data);
+bool	join_philos(t_data *data);
 void	destroy_mutexes(t_data *data);
 
 //routine functions

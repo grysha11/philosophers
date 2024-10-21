@@ -6,7 +6,7 @@
 /*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 23:05:18 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/20 17:56:44 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/10/21 16:51:13 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ bool	check_data(t_data data, int len)
 bool	init_data(t_data *data, char **av, int len)
 {
 	data->amount = atoi(av[1]);
-	data->exit = 0;
 	data->t_die = atoi(av[2]);
+	data->exit = 0;
 	data->t_eat = atoi(av[3]);
 	data->t_sleep = atoi(av[4]);
 	if (len == 6)

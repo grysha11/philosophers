@@ -6,7 +6,7 @@
 /*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 09:36:47 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/21 09:21:41 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/10/21 14:36:48 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@
 // util functions
 int		ft_atoi(char const *str);
 int		ft_isdigit(int c);
-size_t	get_time(void);
+ssize_t	get_time(void);
 
 // thread functions
 bool	create_thrd(pthread_t *thread, void *routine(void *), void *arg);

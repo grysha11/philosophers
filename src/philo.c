@@ -6,19 +6,20 @@
 /*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 16:17:38 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/21 14:27:52 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/10/21 17:17:27 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-void	ft_usleep(size_t time)
+void	ft_usleep(int time)
 {
-	while (1)
-	{
-		if (get_time() == time)
-			return ;
-	}
+	ssize_t	i;
+
+	i = get_time();
+	while(1)
+		if((int)(get_time() - i) >= time)
+			break ;
 }
 
 void	*routine_monitor(void *arg)
@@ -40,15 +41,16 @@ void	*routine_monitor(void *arg)
             {
                 time = current_time - data->philos[i].start_t;
                 data->philos[i].dead = true;
-                printf("😭💀%sPhilosopher ID-%d is dead difference is %zu%s\n", COLOR_RED, data->philos[i].id, time, COLOR);
-                data->exit = 1;
+                printf("😭💀%sPhilosopher ID-%d is dead difference is %zu\tand time is: %zu%s\n", COLOR_RED, data->philos[i].id, time, get_time(), COLOR);
+            	data->exit = 1;
+				mutex_unlock(&data->forks[data->philos[i].fork_l]);
+				mutex_unlock(&data->forks[data->philos[i].fork_r]);
                 mutex_unlock(&data->stop);
                 return (NULL);
             }
             mutex_unlock(&data->stop);
             i++;
         }
-		ft_usleep(100);
     }
 }
 
@@ -78,6 +80,8 @@ void	print_state(t_philo *philo)
 
 bool	try_forks(t_philo *philo)
 {
+	if (philo->data->exit == 1)
+		return (false);
 	if (philo->fork_l < philo->fork_r)
 	{
 		if (mutex_lock(&philo->data->forks[philo->fork_l]) == true)
@@ -85,7 +89,10 @@ bool	try_forks(t_philo *philo)
 			if (mutex_lock(&philo->data->forks[philo->fork_r]) == true)
 				return (true);
 			else
+			{
 				mutex_unlock(&philo->data->forks[philo->fork_l]);
+				return (false);
+			}
 		}
 	}
 	else
@@ -95,7 +102,10 @@ bool	try_forks(t_philo *philo)
 			if (mutex_lock(&philo->data->forks[philo->fork_l]) == true)
 				return (true);
 			else
+			{
 				mutex_unlock(&philo->data->forks[philo->fork_r]);
+				return (false);
+			}
 		}
 	}
 	return (false);
@@ -103,12 +113,11 @@ bool	try_forks(t_philo *philo)
 
 void	ft_eat(t_philo *philo)
 {
-	int	time;
-
+	if (philo->data->exit == 1)
+		return ;
 	philo->state = EAT;
 	print_state(philo);
-	time = philo->data->t_eat + get_time();
-	ft_usleep(time);
+	ft_usleep(philo->data->t_eat);
 	philo->start_t = get_time();
 	mutex_unlock(&philo->data->forks[philo->fork_l]);
 	mutex_unlock(&philo->data->forks[philo->fork_r]);
@@ -116,21 +125,12 @@ void	ft_eat(t_philo *philo)
 
 void	ft_sleep(t_philo *philo)
 {
-	int time;
-
+	if (philo->data->exit == 1)
+		return ;
 	philo->state = SLEEP;
 	print_state(philo);
-	time = philo->data->t_eat + get_time();
-	ft_usleep(time);
-}
-
-bool	check_death(t_data *data)
-{
-	if (data->exit == 1)
-	{
-		return (true);
-	}
-	return (false);
+	ft_usleep(philo->data->t_sleep);
+	philo->state = THINK;
 }
 
 void	*routine_philo(void *arg)
@@ -140,29 +140,19 @@ void	*routine_philo(void *arg)
 	philo = (t_philo *)arg;
 	while (1)
 	{
-		if (check_death(philo->data) == true)
-		{
-			return (NULL);
-		}
 		print_state(philo);
-		if (try_forks(philo) == true)
+		while (try_forks(philo) == false)
 		{
-			if (check_death(philo->data) == true)
-			{
-				return (NULL);
-			}
-			ft_eat(philo);
-			if (check_death(philo->data) == true)
-			{
-				return (NULL);
-			}
-			ft_sleep(philo);
-			if (check_death(philo->data) == true)
-			{
-				return (NULL);
-			}
+			if (philo->data->exit == 1)
+				break ;
 		}
+		ft_eat(philo);
+		ft_sleep(philo);
+		if (philo->data->exit == 1)
+			break ;
 	}
+	mutex_unlock(&philo->data->forks[philo->fork_l]);
+	mutex_unlock(&philo->data->forks[philo->fork_r]);
 	return (NULL);
 }
 
@@ -182,7 +172,7 @@ void	get_forks(t_philo *philo, int amount)
 	philo->fork_r = philo->id % amount;
 }
 
-size_t	get_time(void)
+ssize_t	get_time(void)
 {
 	struct timeval	time;
 	

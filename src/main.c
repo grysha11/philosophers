@@ -6,7 +6,7 @@
 /*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 23:05:18 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/21 16:51:13 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/10/22 08:36:02 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ bool	init_data(t_data *data, char **av, int len)
 	if (len == 6)
 		data->cycle = atoi(av[5]);
 	else
-		data->cycle = 1;
+		data->cycle = -1;
 	if (!check_data(*data, len))
 		return (false);
 	return (true);

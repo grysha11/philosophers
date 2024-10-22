@@ -6,7 +6,7 @@
 /*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 16:17:38 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/21 17:17:27 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/10/22 08:50:52 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	*routine_monitor(void *arg)
 {
     t_data	*data;
     int		i;
+	int		e_flag;
     size_t	time;
     size_t	current_time;
 
@@ -33,11 +34,16 @@ void	*routine_monitor(void *arg)
     while (1)
     {
         i = 0;
+		e_flag = 0;
         while (i < data->amount)
         {
             mutex_lock(&data->stop);
+			if (data->philos[i].eat_c == data->cycle)
+				e_flag = 1;
+			else
+				e_flag = 0;
             current_time = get_time();
-            if (current_time > data->philos[i].start_t + data->t_die)
+            if (current_time > data->philos[i].start_t + data->t_die && data->philos[i].state != EAT)
             {
                 time = current_time - data->philos[i].start_t;
                 data->philos[i].dead = true;
@@ -48,6 +54,13 @@ void	*routine_monitor(void *arg)
                 mutex_unlock(&data->stop);
                 return (NULL);
             }
+			if (e_flag == 1)
+			{
+				data->exit = 1;
+				printf("🎉🥳%sPhilosophers succesfuly survived all of the circles !!%s\n", COLOR_GREEN, COLOR);
+				mutex_unlock(&data->stop);
+				return (NULL);
+			}
             mutex_unlock(&data->stop);
             i++;
         }
@@ -58,6 +71,8 @@ void	print_state(t_philo *philo)
 {
 	size_t	cur_t;
 
+	if (philo->data->exit == 1)
+		return ;
 	mutex_lock(&philo->data->print);
 	cur_t = get_time();
 	if (philo->state == THINK)
@@ -118,6 +133,7 @@ void	ft_eat(t_philo *philo)
 	philo->state = EAT;
 	print_state(philo);
 	ft_usleep(philo->data->t_eat);
+	philo->eat_c += 1;
 	philo->start_t = get_time();
 	mutex_unlock(&philo->data->forks[philo->fork_l]);
 	mutex_unlock(&philo->data->forks[philo->fork_r]);
@@ -188,6 +204,7 @@ bool	init_philos(t_data *data)
 	while (i < data->amount)
 	{
 		data->philos[i].id = i + 1;
+		data->philos[i].eat_c = 0;
 		data->philos[i].state = THINK;
 		data->philos[i].dead = false;
 		get_forks(&data->philos[i], data->amount);

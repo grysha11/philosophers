@@ -6,7 +6,7 @@
 /*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 16:17:38 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/22 10:24:14 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/10/22 17:26:41 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	*routine_monitor(void *arg)
 			else
 				e_flag = 0;
             current_time = get_time();
-            if (current_time > data->philos[i].start_t + data->t_die && data->philos[i].state != EAT)
+            if (current_time > data->philos[i].start_t + data->t_die)
             {
                 time = current_time - data->philos[i].start_t;
                 data->philos[i].dead = true;

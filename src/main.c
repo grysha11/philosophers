@@ -6,7 +6,7 @@
 /*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 23:05:18 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/22 08:36:02 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/10/22 09:01:51 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,4 +83,5 @@ int	main(int ac, char **av)
 		printf("%sERROR%s: Incorrect amount of arguments:\n\tTry: %s./philo num_of_philos time_to_die time_to_eat time_to_sleep (num_to_eat)%s\n", COLOR_RED, COLOR, COLOR_CYAN, COLOR);
 		return (1);
 	}
+	return (0);
 }

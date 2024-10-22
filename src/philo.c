@@ -6,7 +6,7 @@
 /*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 16:17:38 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/22 08:50:52 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/10/22 10:24:14 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ bool	try_forks(t_philo *philo)
 {
 	if (philo->data->exit == 1)
 		return (false);
+	print_state(philo);
 	if (philo->fork_l < philo->fork_r)
 	{
 		if (mutex_lock(&philo->data->forks[philo->fork_l]) == true)
@@ -154,9 +155,9 @@ void	*routine_philo(void *arg)
 	t_philo *philo;
 
 	philo = (t_philo *)arg;
+	print_state(philo);
 	while (1)
 	{
-		print_state(philo);
 		while (try_forks(philo) == false)
 		{
 			if (philo->data->exit == 1)
@@ -171,6 +172,7 @@ void	*routine_philo(void *arg)
 	mutex_unlock(&philo->data->forks[philo->fork_r]);
 	return (NULL);
 }
+// I have to change my routine to avoid exit at wrong spot
 
 bool	create_thrd(pthread_t *thread, void *routine(void *), void *arg)
 {

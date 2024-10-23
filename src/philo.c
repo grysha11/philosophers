@@ -6,78 +6,34 @@
 /*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 16:17:38 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/22 17:26:41 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/10/23 14:40:26 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-void	ft_usleep(int time)
-{
-	ssize_t	i;
-
-	i = get_time();
-	while(1)
-		if((int)(get_time() - i) >= time)
-			break ;
-}
-
-void	*routine_monitor(void *arg)
-{
-    t_data	*data;
-    int		i;
-	int		e_flag;
-    size_t	time;
-    size_t	current_time;
-
-    data = (t_data *)arg;
-    while (1)
-    {
-        i = 0;
-		e_flag = 0;
-        while (i < data->amount)
-        {
-            mutex_lock(&data->stop);
-			if (data->philos[i].eat_c == data->cycle)
-				e_flag = 1;
-			else
-				e_flag = 0;
-            current_time = get_time();
-            if (current_time > data->philos[i].start_t + data->t_die)
-            {
-                time = current_time - data->philos[i].start_t;
-                data->philos[i].dead = true;
-                printf("😭💀%sPhilosopher ID-%d is dead difference is %zu\tand time is: %zu%s\n", COLOR_RED, data->philos[i].id, time, get_time(), COLOR);
-            	data->exit = 1;
-				mutex_unlock(&data->forks[data->philos[i].fork_l]);
-				mutex_unlock(&data->forks[data->philos[i].fork_r]);
-                mutex_unlock(&data->stop);
-                return (NULL);
-            }
-			if (e_flag == 1)
-			{
-				data->exit = 1;
-				printf("🎉🥳%sPhilosophers succesfuly survived all of the circles !!%s\n", COLOR_GREEN, COLOR);
-				mutex_unlock(&data->stop);
-				return (NULL);
-			}
-            mutex_unlock(&data->stop);
-            i++;
-        }
-    }
-}
-
 void	print_state(t_philo *philo)
 {
 	size_t	cur_t;
 
-	if (philo->data->exit == 1)
-		return ;
 	mutex_lock(&philo->data->print);
-	cur_t = get_time();
+	if (philo->data->exit == 1)
+	{
+		mutex_unlock(&philo->data->print);
+		return ;
+	}
+	cur_t = get_time(philo);
+	if (philo->state == FORK1)
+	{
+		printf("Philo ID-%d took a fork\n", philo->id);
+	}
+	if (philo->state == FORK2)
+	{
+		printf("Philo ID-%d took a fork\n", philo->id);
+	}
 	if (philo->state == THINK)
 	{
-		printf("🤔💭%sPhilosopher ID-%d is thinking...%s\tTime is:%lu\n",COLOR_CYAN,
+		printf("🤔💭%sPhilosopher ID-%d is thinking...%s\tTime is:%lu\n", COLOR_CYAN,
 			philo->id, COLOR, cur_t);
 	}
 	else if (philo->state == SLEEP)
@@ -102,8 +58,14 @@ bool	try_forks(t_philo *philo)
 	{
 		if (mutex_lock(&philo->data->forks[philo->fork_l]) == true)
 		{
+			philo->state = FORK2;
+			print_state(philo);
 			if (mutex_lock(&philo->data->forks[philo->fork_r]) == true)
+			{
+				philo->state = FORK2;
+				print_state(philo);
 				return (true);
+			}
 			else
 			{
 				mutex_unlock(&philo->data->forks[philo->fork_l]);
@@ -115,8 +77,14 @@ bool	try_forks(t_philo *philo)
 	{
 		if (mutex_lock(&philo->data->forks[philo->fork_r]) == true)
 		{
+			philo->state = FORK1;
+			print_state(philo);
 			if (mutex_lock(&philo->data->forks[philo->fork_l]) == true)
+			{
+				philo->state = FORK2;
+				print_state(philo);
 				return (true);
+			}
 			else
 			{
 				mutex_unlock(&philo->data->forks[philo->fork_r]);
@@ -135,7 +103,7 @@ void	ft_eat(t_philo *philo)
 	print_state(philo);
 	ft_usleep(philo->data->t_eat);
 	philo->eat_c += 1;
-	philo->start_t = get_time();
+	philo->start_t = get_time(philo);
 	mutex_unlock(&philo->data->forks[philo->fork_l]);
 	mutex_unlock(&philo->data->forks[philo->fork_r]);
 }
@@ -147,55 +115,15 @@ void	ft_sleep(t_philo *philo)
 	philo->state = SLEEP;
 	print_state(philo);
 	ft_usleep(philo->data->t_sleep);
+	if (philo->data->exit == 1)
+		return ;
 	philo->state = THINK;
-}
-
-void	*routine_philo(void *arg)
-{
-	t_philo *philo;
-
-	philo = (t_philo *)arg;
-	print_state(philo);
-	while (1)
-	{
-		while (try_forks(philo) == false)
-		{
-			if (philo->data->exit == 1)
-				break ;
-		}
-		ft_eat(philo);
-		ft_sleep(philo);
-		if (philo->data->exit == 1)
-			break ;
-	}
-	mutex_unlock(&philo->data->forks[philo->fork_l]);
-	mutex_unlock(&philo->data->forks[philo->fork_r]);
-	return (NULL);
-}
-// I have to change my routine to avoid exit at wrong spot
-
-bool	create_thrd(pthread_t *thread, void *routine(void *), void *arg)
-{
-	if (pthread_create(thread, NULL, routine, arg) != 0)
-	{
-		printf("Failed to create thread\n");
-		return (false);
-	}
-	return (true);
 }
 
 void	get_forks(t_philo *philo, int amount)
 {
 	philo->fork_l = philo->id - 1;
 	philo->fork_r = philo->id % amount;
-}
-
-ssize_t	get_time(void)
-{
-	struct timeval	time;
-	
-	gettimeofday(&time, NULL);
-	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }
 
 bool	init_philos(t_data *data)
@@ -210,61 +138,12 @@ bool	init_philos(t_data *data)
 		data->philos[i].state = THINK;
 		data->philos[i].dead = false;
 		get_forks(&data->philos[i], data->amount);
-		data->philos[i].start_t = get_time();
+		data->philos[i].start_t = 0;
+		data->philos[i].time = 0;
 		data->philos[i].data = data;
 		if (!create_thrd(&data->philos[i].thrd, routine_philo, (void *)&data->philos[i]))
 			return (false);
 		i++;
-	}
-	return (true);
-}
-
-bool	mutex_unlock(pthread_mutex_t *mutex)
-{
-	if (pthread_mutex_unlock(mutex) != 0)
-	{
-		printf("Failed to unlock mutex\n");
-		return (false);
-	}
-	return (true);
-}
-
-bool	mutex_lock(pthread_mutex_t *mutex)
-{
-	if (pthread_mutex_lock(mutex) != 0)
-	{
-		printf("Failed to lock mutex\n");
-		return (false);
-	}
-	return (true);
-}
-
-bool	mutex_destroy(pthread_mutex_t *mutex)
-{
-	if (pthread_mutex_destroy(mutex) != 0)
-	{
-		printf("Failed to destroy mutex\n");
-		return (false);
-	}
-	return (true);
-}
-
-bool	mutex_init(pthread_mutex_t *mutex)
-{
-	if (pthread_mutex_init(mutex, NULL) != 0)
-	{
-		printf("Failed to init mutex\n");
-		return (false);
-	}
-	return (true);
-}
-
-bool	join_thrd(pthread_t *thread)
-{
-	if (pthread_join(*thread, NULL) != 0)
-	{
-		printf("Failed to join thread\n");
-		return (false);
 	}
 	return (true);
 }
@@ -284,20 +163,6 @@ bool	init_mutexes(t_data *data)
 		{
 			return (false);
 		}
-		i++;
-	}
-	return (true);
-}
-
-bool	join_philos(t_data *data)
-{
-	int	i;
-
-	i = 0;
-	while (i < data->amount)
-	{
-		if (!join_thrd(&data->philos[i].thrd))
-			return (false);
 		i++;
 	}
 	return (true);

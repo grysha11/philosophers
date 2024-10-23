@@ -6,7 +6,7 @@
 /*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 11:26:06 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/22 08:37:04 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/10/23 14:38:38 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,20 +22,23 @@ typedef enum e_state
 {
 	SLEEP,
 	EAT,
-	THINK
+	THINK,
+	FORK1,
+	FORK2
 }			t_state;
 
 typedef struct s_philo
 {
-	int				id;
-	int				eat_c;
-	int				dead;
-	t_state			state;
-	int				fork_l;
-	int				fork_r;
-	unsigned long	start_t;
-	pthread_t		thrd;
-	t_data			*data;
+	int			id;
+	int			eat_c;
+	int			dead;
+	t_state		state;
+	int			fork_l;
+	int			fork_r;
+	size_t		start_t;
+	size_t		time;
+	pthread_t	thrd;
+	t_data		*data;
 }				t_philo;
 
 typedef struct s_data

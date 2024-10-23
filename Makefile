@@ -6,13 +6,14 @@
 #    By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/16 09:20:53 by hzakharc          #+#    #+#              #
-#    Updated: 2024/10/16 15:16:05 by hzakharc         ###   ########.fr        #
+#    Updated: 2024/10/23 09:11:55 by hzakharc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRC_DIR			=	src/
 
-SRC				=	$(SRC_DIR)/main.c $(SRC_DIR)/util.c $(SRC_DIR)/philo.c
+SRC				=	$(SRC_DIR)/main.c $(SRC_DIR)/util.c $(SRC_DIR)/philo.c $(SRC_DIR)/mutex.c \
+					$(SRC_DIR)/thrd.c $(SRC_DIR)/routine.c
 
 OBJS			=	$(SRC:.c=.o)
 

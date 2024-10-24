@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
+/*   By: hzakharc <hzakharc@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 09:09:43 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/23 14:47:02 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/10/24 12:57:21 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ void	*routine_monitor(void *arg)
 	t_data	*data;
 	int		i;
 	int		e_flag;
-	size_t	time;
 	size_t	current_time;
 
 	data = (t_data *)arg;
@@ -31,9 +30,10 @@ void	*routine_monitor(void *arg)
 			current_time = get_time(&data->philos[i]);
 			if (current_time > data->philos[i].start_t + data->t_die + 10)
 			{
-				time = current_time - data->philos[i].start_t;
 				data->philos[i].dead = true;
 				data->exit = 1;
+				printf("%zu: CURRENT TIME\n", current_time);
+				printf("%zu: START TIME OF PHILO\n", data->philos[i].start_t);
 				printf("😭💀%sPhilosopher ID-%d is dead\t\ttime is: %zu\tDIFFERENCE IS %zu%s\n", COLOR_RED, data->philos[i].id, get_time(&data->philos[i]), current_time - data->philos[i].start_t + data->t_die, COLOR);
 				mutex_unlock(&data->stop);
 				return (NULL);
@@ -73,9 +73,6 @@ void	*routine_philo(void *arg)
 			ft_eat(philo);
 			ft_sleep(philo);
 		}
-		else
-			if (philo->data->exit == 1)
-				break ;
 	}
 	mutex_unlock(&philo->data->forks[philo->fork_l]);
 	mutex_unlock(&philo->data->forks[philo->fork_r]);

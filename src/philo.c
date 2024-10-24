@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
+/*   By: hzakharc <hzakharc@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 16:17:38 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/23 14:40:26 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/10/24 13:01:32 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,6 +192,7 @@ void	initialize(t_data *data)
 		destroy_mutexes(data);
 		return ;
 	}
+	ft_usleep(data->amount / 2);
 	create_thrd(&monitor, routine_monitor, (void *)data);
 	join_thrd(&monitor);
 	join_philos(data);

@@ -6,7 +6,7 @@
 /*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 12:44:37 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/23 14:40:39 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/10/24 16:01:25 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,10 @@ size_t	get_time(t_philo *philo)
 	struct timeval	time;
 
 	gettimeofday(&time, NULL);
-	if (philo)
-		return ((time.tv_sec * 1000) + (time.tv_usec / 1000) - philo->time);
-	else
+	if (philo == NULL)
 		return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
+	else
+		return ((time.tv_sec * 1000) + (time.tv_usec / 1000) - philo->time);
 }
 
 void	ft_usleep(int time)

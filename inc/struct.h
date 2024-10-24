@@ -6,7 +6,7 @@
 /*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 11:26:06 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/23 14:38:38 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/10/24 16:54:10 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ typedef struct s_philo
 	int			id;
 	int			eat_c;
 	int			dead;
+	int			ready;
 	t_state		state;
 	int			fork_l;
 	int			fork_r;

@@ -3,21 +3,62 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
+/*   By: hzakharc <hzakharc@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 09:09:43 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/24 16:55:19 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/10/25 15:31:25 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
+
+bool	routine_monitor_util(t_data *data, int *e_flag, int i)
+{
+	size_t	current_time;
+
+	current_time = get_time(&data->philos[i]);
+	if (check_death(data, current_time, i) == true)
+		return (true);
+	if (data->cycle != -1 && data->philos[i].eat_c >= data->cycle)
+		*e_flag = 1;
+	if (*e_flag == 1)
+	{
+		data->exit = 1;
+		printf("🎉🥳%sPhilosophers succesfuly survived ",
+			COLOR_GREEN);
+		printf("all of the circles !!%s\tTime is:%zu\n",
+			COLOR, get_time(&data->philos[i]));
+		mutex_unlock(&data->stop);
+		return (true);
+	}
+	mutex_unlock(&data->stop);
+	return (false);
+}
+
+bool	check_death(t_data *data, size_t current_time, int i)
+{
+	if (current_time > data->philos[i].start_t + data->t_die + 10)
+	{
+		data->philos[i].dead = true;
+		data->exit = 1;
+		printf("%zu: CURRENT TIME\n", current_time);
+		printf("%zu: START TIME OF PHILO\n", data->philos[i].start_t);
+		printf("%zu: TIME OF PHILO\n", data->philos[i].time);
+		printf("😭💀%sPhilosopher ID-%d is dead\t\ttime is: %zu\t",
+			COLOR_RED, data->philos[i].id, get_time(&data->philos[i]));
+		printf("DIFFERENCE IS %zu%s\n", current_time
+			- data->philos[i].start_t + data->t_die, COLOR);
+		mutex_unlock(&data->stop);
+		return (true);
+	}
+	return (false);
+}
 
 void	*routine_monitor(void *arg)
 {
 	t_data	*data;
 	int		i;
 	int		e_flag;
-	size_t	current_time;
 
 	data = (t_data *)arg;
 	while (1)
@@ -31,28 +72,8 @@ void	*routine_monitor(void *arg)
 				i++;
 			else
 			{
-				current_time = get_time(&data->philos[i]);
-				if (current_time > data->philos[i].start_t + data->t_die + 10)
-				{
-					data->philos[i].dead = true;
-					data->exit = 1;
-					printf("%zu: CURRENT TIME\n", current_time);
-					printf("%zu: START TIME OF PHILO\n", data->philos[i].start_t);
-					printf("%zu: TIME OF PHILO\n", data->philos[i].time);
-					printf("😭💀%sPhilosopher ID-%d is dead\t\ttime is: %zu\tDIFFERENCE IS %zu%s\n", COLOR_RED, data->philos[i].id, get_time(&data->philos[i]), current_time - data->philos[i].start_t + data->t_die, COLOR);
-					mutex_unlock(&data->stop);
+				if (routine_monitor_util(data, &e_flag, i) == true)
 					return (NULL);
-				}
-				if (data->cycle != -1 && data->philos[i].eat_c >= data->cycle)
-					e_flag = 1;
-				if (e_flag == 1)
-				{
-					data->exit = 1;
-					printf("🎉🥳%sPhilosophers succesfuly survived all of the circles !!%s\tTime is:%zu\n", COLOR_GREEN, COLOR, get_time(&data->philos[i]));
-					mutex_unlock(&data->stop);
-					return (NULL);
-				}
-				mutex_unlock(&data->stop);
 				i++;
 			}
 		}

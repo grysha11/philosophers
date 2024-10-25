@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   thrd.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
+/*   By: hzakharc <hzakharc@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 09:05:52 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/23 14:10:20 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/10/25 15:29:48 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,4 +44,44 @@ bool	join_philos(t_data *data)
 		i++;
 	}
 	return (true);
+}
+
+bool	init_philos(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (i < data->amount)
+	{
+		data->philos[i].id = i + 1;
+		data->philos[i].eat_c = 0;
+		data->philos[i].state = THINK;
+		data->philos[i].dead = false;
+		get_forks(&data->philos[i], data->amount);
+		data->philos[i].start_t = 0;
+		data->philos[i].time = 0;
+		data->philos[i].ready = 0;
+		data->philos[i].data = data;
+		if (!create_thrd(&data->philos[i].thrd,
+				routine_philo, (void *)&data->philos[i]))
+			return (false);
+		i++;
+	}
+	return (true);
+}
+
+void	initialize(t_data *data)
+{
+	pthread_t	monitor;
+
+	init_mutexes(data);
+	if (!init_philos(data))
+	{
+		destroy_mutexes(data);
+		return ;
+	}
+	create_thrd(&monitor, routine_monitor, (void *)data);
+	join_thrd(&monitor);
+	join_philos(data);
+	destroy_mutexes(data);
 }

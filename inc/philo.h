@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hzakharc <hzakharc@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 09:36:47 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/25 15:30:38 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/10/26 12:55:04 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@
 // util functions
 int		ft_atoi(char const *str);
 int		ft_isdigit(int c);
-size_t	get_time(t_philo *philo);
-void	ft_usleep(int time);
+ssize_t	get_time(t_philo *philo);
+void	ft_usleep(ssize_t time);
 
 // thread functions
 bool	create_thrd(pthread_t *thread, void *routine(void *), void *arg);
@@ -57,8 +57,8 @@ void	destroy_mutexes(t_data *data);
 void	get_forks(t_philo *philo, int amount);
 
 //routine functions
-bool	check_death(t_data *data, size_t current_time, int i);
-bool	routine_monitor_util(t_data *data, int *e_flag, int i);
+bool	check_death(t_data **data, ssize_t current_time, int i);
+bool	routine_monitor_util(t_data **data, int *e_flag, int i);
 void	*routine_philo(void *arg);
 void	*routine_monitor(void *arg);
 void	print_state(t_philo *philo);

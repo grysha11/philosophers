@@ -6,7 +6,7 @@
 /*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 11:26:06 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/24 16:54:10 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/10/26 15:17:16 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # include "philo.h"
 # include <stdbool.h>
 # include <pthread.h>
+# include <unistd.h>
 
 typedef struct s_data	t_data;
 
@@ -36,8 +37,8 @@ typedef struct s_philo
 	t_state		state;
 	int			fork_l;
 	int			fork_r;
-	size_t		start_t;
-	size_t		time;
+	ssize_t		start_t;
+	ssize_t		time;
 	pthread_t	thrd;
 	t_data		*data;
 }				t_philo;
@@ -45,13 +46,14 @@ typedef struct s_philo
 typedef struct s_data
 {
 	int				amount;
-	size_t			t_die;
-	size_t			t_eat;
-	size_t			t_sleep;
+	ssize_t			t_die;
+	ssize_t			t_eat;
+	ssize_t			t_sleep;
 	int				cycle;
 	int				exit;
 	pthread_mutex_t	stop;
 	pthread_mutex_t	print;
+	int				forks_check[200];
 	pthread_mutex_t	forks[200];
 	t_philo			philos[200];
 }				t_data;

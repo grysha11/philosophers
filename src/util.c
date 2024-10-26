@@ -6,7 +6,7 @@
 /*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 12:44:37 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/24 16:01:25 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/10/26 12:54:50 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	ft_atoi(char const *str)
 	return (n);
 }
 
-size_t	get_time(t_philo *philo)
+ssize_t	get_time(t_philo *philo)
 {
 	struct timeval	time;
 
@@ -70,12 +70,12 @@ size_t	get_time(t_philo *philo)
 		return ((time.tv_sec * 1000) + (time.tv_usec / 1000) - philo->time);
 }
 
-void	ft_usleep(int time)
+void	ft_usleep(ssize_t time)
 {
 	ssize_t	i;
 
 	i = get_time(NULL);
 	while (1)
-		if ((int)(get_time(NULL) - i) >= time)
+		if ((get_time(NULL) - i) >= time)
 			break ;
 }

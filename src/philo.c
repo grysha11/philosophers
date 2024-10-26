@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hzakharc <hzakharc@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 16:17:38 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/25 15:29:42 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/10/26 15:09:27 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,8 @@ void	ft_eat(t_philo *philo)
 	ft_usleep(philo->data->t_eat);
 	philo->eat_c += 1;
 	philo->start_t = get_time(philo);
+	philo->data->forks_check[philo->fork_l] = 0;
+	philo->data->forks_check[philo->fork_r] = 0;
 	mutex_unlock(&philo->data->forks[philo->fork_l]);
 	mutex_unlock(&philo->data->forks[philo->fork_r]);
 }

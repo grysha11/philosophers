@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mutex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hzakharc <hzakharc@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 09:06:03 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/25 15:28:09 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/10/26 15:10:19 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ void	destroy_mutexes(t_data *data)
 	i = 0;
 	while (i < data->amount)
 	{
+		if (data->forks_check[i] == 1)
+			mutex_unlock(&data->forks[i]);
 		mutex_destroy(&data->forks[i]);
 		i++;
 	}

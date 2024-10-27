@@ -6,7 +6,7 @@
 /*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 16:17:38 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/26 15:09:27 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/10/27 15:47:47 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,14 @@
 
 void	print_util(t_philo *philo, size_t cur_t)
 {
-	if (philo->state == FORK1)
+	if (philo->state == FORK)
 	{
-		printf("Philo ID-%d took a fork\n", philo->id);
-	}
-	if (philo->state == FORK2)
-	{
-		printf("Philo ID-%d took a fork\n", philo->id);
+		printf("%zu %d has taken a fork\n", cur_t, philo->id);
 	}
 	if (philo->state == THINK)
 	{
-		printf("🤔💭%sPhilosopher ID-%d is thinking...%s\tTime is:%lu\n",
-			COLOR_CYAN, philo->id, COLOR, cur_t);
+		printf("%zu %d is thinking\n",
+			cur_t, philo->id);
 	}
 }
 
@@ -40,17 +36,17 @@ void	print_state(t_philo *philo)
 		return ;
 	}
 	cur_t = get_time(philo);
-	if (philo->state == THINK || philo->state == FORK1 || philo->state == FORK2)
+	if (philo->state == THINK || philo->state == FORK)
 		print_util(philo, cur_t);
 	else if (philo->state == SLEEP)
 	{
-		printf("😴💤%sPhilosopher ID-%d is sleeping...%s\tTime is:%lu\n",
-			COLOR_CYAN, philo->id, COLOR, cur_t);
+		printf("%zu %d is sleeping\n",
+			cur_t, philo->id);
 	}
 	else if (philo->state == EAT)
 	{
-		printf("🍝🍴%sPhilosopher ID-%d is eating...%s\tTime is:%lu\n",
-			COLOR_CYAN, philo->id, COLOR, cur_t);
+		printf("%zu %d is eating\n",
+			cur_t, philo->id);
 	}
 	mutex_unlock(&philo->data->print);
 }
@@ -63,11 +59,8 @@ void	ft_eat(t_philo *philo)
 	print_state(philo);
 	ft_usleep(philo->data->t_eat);
 	philo->eat_c += 1;
+	update_forks(philo);
 	philo->start_t = get_time(philo);
-	philo->data->forks_check[philo->fork_l] = 0;
-	philo->data->forks_check[philo->fork_r] = 0;
-	mutex_unlock(&philo->data->forks[philo->fork_l]);
-	mutex_unlock(&philo->data->forks[philo->fork_r]);
 }
 
 void	ft_sleep(t_philo *philo)
@@ -80,6 +73,7 @@ void	ft_sleep(t_philo *philo)
 	if (philo->data->exit == 1)
 		return ;
 	philo->state = THINK;
+	print_state(philo);
 }
 
 bool	init_mutexes(t_data *data)
@@ -93,10 +87,15 @@ bool	init_mutexes(t_data *data)
 	i = 0;
 	while (i < data->amount)
 	{
-		if (!mutex_init(&data->forks[i]))
+		if (!mutex_init(&data->forks[i].mutex))
 		{
 			return (false);
 		}
+		if (i + 1 % 2 == 0)
+			data->forks[i].id = i + 1 % data->amount;
+		else
+			data->forks[i].id = -1;
+		data->forks[i].taken = false;
 		i++;
 	}
 	return (true);

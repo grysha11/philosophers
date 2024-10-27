@@ -6,9 +6,11 @@
 /*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 09:09:43 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/26 15:04:03 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/10/27 15:25:29 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "../inc/philo.h"
 
 #include "../inc/philo.h"
 
@@ -24,10 +26,6 @@ bool	routine_monitor_util(t_data **data, int *e_flag, int i)
 	if (*e_flag == 1)
 	{
 		(*data)->exit = 1;
-		printf("🎉🥳%sPhilosophers succesfuly survived ",
-			COLOR_GREEN);
-		printf("all of the circles !!%s\tTime is:%zu\n",
-			COLOR, get_time(&(*data)->philos[i]));
 		return (true);
 	}
 	return (false);
@@ -35,14 +33,12 @@ bool	routine_monitor_util(t_data **data, int *e_flag, int i)
 
 bool	check_death(t_data **data, ssize_t current_time, int i)
 {
-	if (current_time > (*data)->philos[i].start_t + (*data)->t_die + 10)
+	if (current_time > (*data)->philos[i].start_t + (*data)->t_die + 9
+		&& (*data)->philos[i].state != EAT)
 	{
 		(*data)->philos[i].dead = true;
 		(*data)->exit = 1;
-		printf("😭💀%sPhilosopher ID-%d is dead\t\ttime is: %zu\t",
-			COLOR_RED, (*data)->philos[i].id, get_time(&(*data)->philos[i]));
-		printf("DIFFERENCE IS %zu%s\n", current_time
-			- (*data)->philos[i].start_t + (*data)->t_die, COLOR);
+		printf("%zu %d died\n", current_time, (*data)->philos[i].id);
 		return (true);
 	}
 	return (false);
@@ -67,7 +63,7 @@ void	*routine_monitor(void *arg)
 				if (routine_monitor_util(&data, &e_flag, i) == true)
 				{
 					mutex_unlock(&data->stop);
-					break ;  // Exit inner loop but continue outer to check all philosophers.
+					break ;
 				}
 			}
 			mutex_unlock(&data->stop);
@@ -82,10 +78,9 @@ void	*routine_philo(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	if (philo->id % 2 == 0)
-		ft_usleep(1);
 	philo->ready = 1;
 	philo->time = get_time(NULL);
+	print_state(philo);
 	while (1)
 	{
 		if (philo->data->exit == 1)

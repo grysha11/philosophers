@@ -6,7 +6,7 @@
 /*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 09:36:47 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/26 12:55:04 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/10/27 15:48:25 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,5 +65,6 @@ void	print_state(t_philo *philo);
 bool	try_forks(t_philo *philo);
 void	ft_eat(t_philo *philo);
 void	ft_sleep(t_philo *philo);
+void	update_forks(t_philo *philo);
 
 #endif

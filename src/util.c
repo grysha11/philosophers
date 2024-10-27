@@ -6,7 +6,7 @@
 /*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 12:44:37 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/26 12:54:50 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/10/27 15:28:49 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,9 @@ void	ft_usleep(ssize_t time)
 
 	i = get_time(NULL);
 	while (1)
+	{
 		if ((get_time(NULL) - i) >= time)
 			break ;
+		usleep(100);
+	}
 }

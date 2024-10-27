@@ -6,7 +6,7 @@
 /*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 11:26:06 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/26 15:17:16 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/10/27 13:57:43 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,19 @@
 
 typedef struct s_data	t_data;
 
+typedef struct s_fork
+{
+	bool			taken;
+	int				id;
+	pthread_mutex_t	mutex;
+}				t_fork;
+
 typedef enum e_state
 {
 	SLEEP,
 	EAT,
 	THINK,
-	FORK1,
-	FORK2
+	FORK
 }			t_state;
 
 typedef struct s_philo
@@ -53,8 +59,7 @@ typedef struct s_data
 	int				exit;
 	pthread_mutex_t	stop;
 	pthread_mutex_t	print;
-	int				forks_check[200];
-	pthread_mutex_t	forks[200];
+	t_fork			forks[200];
 	t_philo			philos[200];
 }				t_data;
 

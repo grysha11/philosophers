@@ -5,102 +5,106 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/16 15:14:43 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/18 18:30:45 by hzakharc         ###   ########.fr       */
+/*   Created: 2024/10/19 16:17:38 by hzakharc          #+#    #+#             */
+/*   Updated: 2024/10/28 14:06:52 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-bool	dead_check(t_philo *philo)
+void	print_util(t_philo *philo, size_t cur_t)
 {
-	if (pthread_mutex_lock(&philo->data->stop) != 0)
-		return (true);
+	pthread_mutex_lock(&philo->data->print);
+	if (philo->state == FORK)
+	{
+		printf("%zu %d has taken a fork\n", cur_t, philo->id);
+	}
+	if (philo->state == THINK)
+	{
+		printf("%zu %d is thinking\n",
+			cur_t, philo->id);
+	}
+	pthread_mutex_unlock(&philo->data->print);
+}
+
+void	print_state(t_philo *philo)
+{
+	size_t	cur_t;
+
+	if (!check_podox(philo->data))
+		return ;
+	pthread_mutex_lock(&philo->data->stop);
+	cur_t = get_time(philo);
 	pthread_mutex_unlock(&philo->data->stop);
-	return (philo->dead);
-}
-
-void	routine(void *arg)
-{
-	t_philo *philo;
-
-	philo = (t_philo *)arg;
-	while (dead_check(philo))
+	if (philo->state == THINK || philo->state == FORK)
+		print_util(philo, cur_t);
+	else if (philo->state == SLEEP)
 	{
-		//eat
-		//sleep
-		//think
+		pthread_mutex_lock(&philo->data->print);
+		printf("%zu %d is sleeping\n",
+			cur_t, philo->id);
+		pthread_mutex_unlock(&philo->data->print);
+	}
+	else if (philo->state == EAT)
+	{
+		pthread_mutex_lock(&philo->data->print);
+		printf("%zu %d is eating\n",
+			cur_t, philo->id);
+		pthread_mutex_unlock(&philo->data->print);
 	}
 }
 
-void	init_forks(t_data *data)
+void	ft_eat(t_philo *philo)
 {
-	int				i;
-
-	i = 0;
-	while (i < data->amount)
-	{
-		pthread_mutex_init(&data->forks[i], NULL);
-		i++;
-	}
+	if (!check_podox(philo->data))
+		return ;
+	pthread_mutex_lock(&philo->data->stop);
+	philo->state = EAT;
+	pthread_mutex_unlock(&philo->data->stop);
+	print_state(philo);
+	ft_usleep(philo->data->t_eat);
+	pthread_mutex_lock(&philo->data->stop);
+	philo->eat_c += 1;
+	pthread_mutex_unlock(&philo->data->stop);
+	pthread_mutex_lock(&philo->data->stop);
+	philo->start_t = get_time(philo);
+	pthread_mutex_unlock(&philo->data->stop);
+	update_forks(philo);
 }
 
-void	get_forks(t_philo *philo)
+void	ft_sleep(t_philo *philo)
 {
-	if (philo->id - 1 == philo->data->amount)
-	{
-		philo->fork_l = 0;
-		philo->fork_l = philo->data->amount;
-	}
-	else
-	{
-		philo->fork_l = philo->id - 1;
-		philo->fork_r = philo->id;
-	}
+	if (!check_podox(philo->data))
+		return ;
+	pthread_mutex_lock(&philo->data->stop);
+	philo->state = SLEEP;
+	pthread_mutex_unlock(&philo->data->stop);
+	print_state(philo);
+	ft_usleep(philo->data->t_sleep);
+	if (!check_podox(philo->data))
+		return ;
+	pthread_mutex_lock(&philo->data->stop);
+	philo->state = THINK;
+	pthread_mutex_unlock(&philo->data->stop);
+	print_state(philo);
 }
 
-unsigned long	get_time(void)
+bool	init_mutexes(t_data *data)
 {
-	struct timeval	time;
-	
-	gettimeofday(&time, NULL);
-	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
-}
-
-bool	init_loop(t_data *data)
-{
-	pthread_t	philo_threads[data->amount];	
-	t_philo		philos[data->amount];
-	int			i;
+	int	i;
 
 	pthread_mutex_init(&data->print, NULL);
-	init_forks(data);
-
+	pthread_mutex_init(&data->stop, NULL);
 	i = 0;
 	while (i < data->amount)
 	{
-		philos[i].id = i + 1;
-		philos[i].state = THINK;
-		philos[i].dead = false;
-		philos[i].data = &data;
-		get_forks(&philos[i]);
-		philos[i].start_t = get_time();
-		if (pthread_create(&philo_threads[i], NULL, routine, (void *)&philos[i]) != 0)
-		{
-			perror("Failed to create thread");
-			return (false);
-		}
+		pthread_mutex_init(&data->forks[i].mutex, NULL);
+		if (i + 1 % 2 == 0)
+			data->forks[i].id = i + 1 % data->amount;
+		else
+			data->forks[i].id = -1;
+		data->forks[i].taken = false;
 		i++;
 	}
-
-	i = 0;
-	while (i < data->amount)
-	{
-		pthread_join(philo_threads[i], NULL);
-		i++;
-	}
-	
-	pthread_mutex_destroy(&data->stop);
-	pthread_mutex_destroy(&data->print);
 	return (true);
 }

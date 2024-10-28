@@ -6,7 +6,7 @@
 /*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 12:44:37 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/16 14:58:44 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/10/28 09:58:09 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,24 @@ int	ft_atoi(char const *str)
 		str++;
 	}
 	return (n);
+}
+
+ssize_t	get_time(t_philo *philo)
+{
+	struct timeval	time;
+
+	gettimeofday(&time, NULL);
+	if (philo == NULL)
+		return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
+	else
+		return ((time.tv_sec * 1000) + (time.tv_usec / 1000) - philo->time);
+}
+
+void	ft_usleep(ssize_t time)
+{
+	ssize_t	start;
+
+	start = get_time(NULL);
+	while ((get_time(NULL) - start) < time)
+		usleep(time);
 }

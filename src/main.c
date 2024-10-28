@@ -6,24 +6,34 @@
 /*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 23:05:18 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/18 18:07:34 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/10/28 09:46:57 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
+void	err_inc_parse(char *first_message)
+{
+	printf("%sERROR%s: %s:\n\t", COLOR_RED, first_message, COLOR);
+	printf("Try: %s./philo num_of_philos time_to_die ", COLOR_CYAN);
+	printf("time_to_eat time_to_sleep (num_to_eat)%s\n", COLOR);
+}
+
 bool	check_data(t_data data, int len)
 {
-	if (!(data.amount > 0 && data.amount <= INT_MAX) || !(data.t_die > 0 && data.t_die <= INT_MAX) || !(data.t_eat > 0 && data.t_eat <= INT_MAX) || !(data.t_sleep > 0 && data.t_sleep <= INT_MAX))
+	if (!(data.amount > 0 && data.amount <= 200)
+		|| !(data.t_die > 0 && data.t_die <= INT_MAX)
+		|| !(data.t_eat > 0 && data.t_eat <= INT_MAX)
+		|| !(data.t_sleep > 0 && data.t_sleep <= INT_MAX))
 	{
-		printf("%sERROR%s: Non-numeric argument:\n\tTry: %s./philo num_of_philos time_to_die time_to_eat time_to_sleep (num_to_eat)%s\n", COLOR_RED, COLOR, COLOR_CYAN, COLOR);
+		err_inc_parse("Number is too big");
 		return (false);
 	}
 	else if (len == 6)
 	{
 		if (!(data.cycle > 0 && data.cycle <= INT_MAX))
 		{
-			printf("%sERROR%s: Non-numeric argument:\n\tTry: %s./philo num_of_philos time_to_die time_to_eat time_to_sleep (num_to_eat)%s\n", COLOR_RED, COLOR, COLOR_CYAN, COLOR);
+			err_inc_parse("Number is too big");
 			return (false);
 		}
 	}
@@ -34,13 +44,14 @@ bool	init_data(t_data *data, char **av, int len)
 {
 	data->amount = atoi(av[1]);
 	data->t_die = atoi(av[2]);
+	data->exit = 0;
 	data->t_eat = atoi(av[3]);
 	data->t_sleep = atoi(av[4]);
 	if (len == 6)
 		data->cycle = atoi(av[5]);
 	else
-		data->cycle = 1;
-	if (check_data(*data, len))
+		data->cycle = -1;
+	if (!check_data(*data, len))
 		return (false);
 	return (true);
 }
@@ -58,7 +69,7 @@ bool	check_input(char **av)
 		{
 			if (!ft_isdigit(av[i][j]))
 			{
-				printf("%sERROR%s: privetNon-numeric argument:\n\tTry: %s./philo num_of_philos time_to_die time_to_eat time_to_sleep (num_to_eat)%s\n", COLOR_RED, COLOR, COLOR_CYAN, COLOR);
+				err_inc_parse("Non-numeric argument");
 				return (false);
 			}
 			j++;
@@ -75,11 +86,12 @@ int	main(int ac, char **av)
 	if (ac == 5 || ac == 6)
 	{
 		if (check_input(av) && init_data(&data, av, ac))
-			init_loop(&data);
+			initialize(&data);
 	}
 	else
 	{
-		printf("%sERROR%s: Incorrect amount of arguments:\n\tTry: %s./philo num_of_philos time_to_die time_to_eat time_to_sleep (num_to_eat)%s\n", COLOR_RED, COLOR, COLOR_CYAN, COLOR);
+		err_inc_parse("Incorrect number of arguments");
 		return (1);
 	}
+	return (0);
 }

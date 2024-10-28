@@ -6,7 +6,7 @@
 /*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 09:09:43 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/28 14:09:26 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/10/28 15:50:28 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 bool	time_checker_d(ssize_t current_time, t_data *data, int i)
 {
 	pthread_mutex_lock(&data->stop);
-	if (current_time > data->philos[i].start_t + data->t_die + 9)
+	if (current_time >= data->philos[i].start_t + data->t_die + 10)
 	{
 		pthread_mutex_unlock(&data->stop);
 		return (true);
@@ -97,13 +97,8 @@ void	*routine_philo(void *arg)
 	print_state(philo);
 	while (1)
 	{
-		pthread_mutex_lock(&philo->data->stop);
-		if (philo->data->exit == 1)
-		{
-			pthread_mutex_unlock(&philo->data->stop);
+		if (!check_podox(philo->data))
 			break ;
-		}
-		pthread_mutex_unlock(&philo->data->stop);
 		if (try_forks(philo) == true)
 		{
 			ft_eat(philo);

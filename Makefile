@@ -6,7 +6,7 @@
 #    By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/16 09:20:53 by hzakharc          #+#    #+#              #
-#    Updated: 2024/10/28 14:05:13 by hzakharc         ###   ########.fr        #
+#    Updated: 2024/10/28 15:50:54 by hzakharc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,7 @@ YELLOW		=	\e[0;33m
 CYAN		=	\033[0;96m
 COLOR		=	\033[0m
 
-CC				=	@cc -Wall -Werror -Wextra -pthread # -fsanitize=thread
+CC				=	@cc -Wall -Werror -Wextra -pthread 	-fsanitize=thread
 RM				=	@rm -f
 
 NAME			=	philo

@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/16 11:26:06 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/28 11:57:45 by hzakharc         ###   ########.fr       */
+/*   Created: 2024/10/29 14:16:59 by hzakharc          #+#    #+#             */
+/*   Updated: 2024/10/29 16:27:39 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,12 @@ typedef struct s_philo
 {
 	int				id;
 	int				eat_c;
-	int				dead;
 	int				ready;
 	t_state			state;
-	int				fork_l;
-	int				fork_r;
-	ssize_t			start_t;
-	ssize_t			time;
+	t_fork			fork_l;
+	t_fork			fork_r;
+	size_t			start_t;
+	size_t			time_e;
 	pthread_t		thrd;
 	t_data			*data;
 }				t_philo;
@@ -52,9 +51,9 @@ typedef struct s_philo
 typedef struct s_data
 {
 	int				amount;
-	ssize_t			t_die;
-	ssize_t			t_eat;
-	ssize_t			t_sleep;
+	size_t			t_die;
+	size_t			t_eat;
+	size_t			t_sleep;
 	int				cycle;
 	int				exit;
 	pthread_mutex_t	stop;

@@ -6,14 +6,13 @@
 #    By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/16 09:20:53 by hzakharc          #+#    #+#              #
-#    Updated: 2024/10/29 11:54:58 by hzakharc         ###   ########.fr        #
+#    Updated: 2024/10/29 14:37:30 by hzakharc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRC_DIR			=	src/
 
-SRC				=	$(SRC_DIR)/main.c $(SRC_DIR)/util.c $(SRC_DIR)/philo.c $(SRC_DIR)/mutex.c \
-					$(SRC_DIR)/thrd.c $(SRC_DIR)/routine.c $(SRC_DIR)/fork.c $(SRC_DIR)/routine_util.c
+SRC				=	$(SRC_DIR)/main.c $(SRC_DIR)/init.c\
 
 OBJS			=	$(SRC:.c=.o)
 
@@ -29,7 +28,7 @@ RM				=	@rm -f
 
 NAME			=	philo
 
-ASCII			=	@./ascii.sh
+# ASCII			=	@./ascii.sh
 
 %.o:			%.c
 					$(CC) -c $< -o $@
@@ -38,14 +37,14 @@ all:			$(NAME)
 
 $(NAME):		$(OBJS)
 				$(CC) $(OBJS) -o $(NAME)
-				$(ASCII) 1
+#				$(ASCII) 1
 
 clean:
 					$(RM) $(OBJS)
 
 fclean:			clean
 					$(RM) $(NAME)
-					$(ASCII) 2
+#					$(ASCII) 2
 
 re:				fclean all
 

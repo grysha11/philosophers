@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/12 23:05:18 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/29 11:45:55 by hzakharc         ###   ########.fr       */
+/*   Created: 2024/10/29 14:18:06 by hzakharc          #+#    #+#             */
+/*   Updated: 2024/10/29 14:38:26 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	err_inc_parse(char *first_message)
 {
-	printf("%sERROR%s: %s:\n\t", COLOR_RED, first_message, COLOR);
+	printf("%sERROR %s: %s:\n\t", COLOR_RED, first_message, COLOR);
 	printf("Try: %s./philo num_of_philos time_to_die ", COLOR_CYAN);
 	printf("time_to_eat time_to_sleep (num_to_eat)%s\n", COLOR);
 }
@@ -42,13 +42,13 @@ bool	check_data(t_data data, int len)
 
 bool	init_data(t_data *data, char **av, int len)
 {
-	data->amount = atoi(av[1]);
-	data->t_die = atoi(av[2]);
+	data->amount = ft_atoi(av[1]);
+	data->t_die = ft_atoi(av[2]);
 	data->exit = 0;
-	data->t_eat = atoi(av[3]);
-	data->t_sleep = atoi(av[4]);
+	data->t_eat = ft_atoi(av[3]);
+	data->t_sleep = ft_atoi(av[4]);
 	if (len == 6)
-		data->cycle = atoi(av[5]);
+		data->cycle = ft_atoi(av[5]);
 	else
 		data->cycle = -1;
 	if (!check_data(*data, len))

@@ -6,7 +6,7 @@
 /*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 09:36:47 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/28 14:10:11 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/10/29 10:19:46 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ bool	routine_monitor_util(t_data **data, int *e_flag, int i);
 void	*routine_philo(void *arg);
 void	*routine_monitor(void *arg);
 void	print_state(t_philo *philo);
+bool	ultra_eat_check(int e_flag, t_data **data);
 bool	try_forks(t_philo *philo);
 bool	take_fork(t_philo *philo, t_fork *fork);
 void	put_fork(t_fork *fork);

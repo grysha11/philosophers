@@ -6,14 +6,14 @@
 #    By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/16 09:20:53 by hzakharc          #+#    #+#              #
-#    Updated: 2024/10/28 15:50:54 by hzakharc         ###   ########.fr        #
+#    Updated: 2024/10/29 11:38:11 by hzakharc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRC_DIR			=	src/
 
 SRC				=	$(SRC_DIR)/main.c $(SRC_DIR)/util.c $(SRC_DIR)/philo.c $(SRC_DIR)/mutex.c \
-					$(SRC_DIR)/thrd.c $(SRC_DIR)/routine.c $(SRC_DIR)/fork.c
+					$(SRC_DIR)/thrd.c $(SRC_DIR)/routine.c $(SRC_DIR)/fork.c $(SRC_DIR)/routine_util.c
 
 OBJS			=	$(SRC:.c=.o)
 
@@ -24,7 +24,7 @@ YELLOW		=	\e[0;33m
 CYAN		=	\033[0;96m
 COLOR		=	\033[0m
 
-CC				=	@cc -Wall -Werror -Wextra -pthread 	-fsanitize=thread
+CC				=	@cc -Wall -Werror -Wextra -pthread #-fsanitize=thread
 RM				=	@rm -f
 
 NAME			=	philo

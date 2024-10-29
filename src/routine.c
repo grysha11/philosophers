@@ -6,7 +6,7 @@
 /*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 09:09:43 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/28 15:50:28 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/10/29 11:32:36 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,15 +72,14 @@ void	*routine_monitor(void *arg)
 		pthread_mutex_unlock(&data->stop);
 		while (i < data->amount)
 		{
-			if (data->philos[i].ready == 1)
-			{
-				if (routine_monitor_util(&data, &e_flag, i) == true)
-					break ;
-			}
+			if (routine_monitor_util(&data, &e_flag, i) == true)
+				break ;
 			pthread_mutex_lock(&data->stop);
 			i++;
 			pthread_mutex_unlock(&data->stop);
 		}
+		if (ultra_eat_check(e_flag, &data))
+			break ;
 	}
 	return (NULL);
 }

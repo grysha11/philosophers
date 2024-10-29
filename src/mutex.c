@@ -6,7 +6,7 @@
 /*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 09:06:03 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/28 14:09:51 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/10/29 09:43:42 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,11 @@ bool	routine_monitor_util(t_data **data, int *e_flag, int i)
 		*e_flag = 1;
 		pthread_mutex_unlock(&(*data)->stop);
 	}
-	if (*e_flag == 1)
+	else
 	{
 		pthread_mutex_lock(&(*data)->stop);
-		(*data)->exit = 1;
+		*e_flag = 0;
 		pthread_mutex_unlock(&(*data)->stop);
-		return (true);
 	}
 	return (false);
 }

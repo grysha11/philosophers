@@ -6,7 +6,7 @@
 /*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 09:09:43 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/29 11:49:00 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/10/29 11:55:56 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 bool	time_checker_d(ssize_t current_time, t_data *data, int i)
 {
 	pthread_mutex_lock(&data->stop);
-	if (current_time >= data->philos[i].start_t + data->t_die + 9 &&
-		data->philos[i].state != EAT)
+	if (current_time >= data->philos[i].start_t + data->t_die + 9
+		&& data->philos[i].state != EAT)
 	{
 		pthread_mutex_unlock(&data->stop);
 		return (true);

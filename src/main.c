@@ -6,7 +6,7 @@
 /*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 23:05:18 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/28 09:46:57 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/10/29 11:45:55 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,11 @@ void	err_inc_parse(char *first_message)
 bool	check_data(t_data data, int len)
 {
 	if (!(data.amount > 0 && data.amount <= 200)
-		|| !(data.t_die > 0 && data.t_die <= INT_MAX)
-		|| !(data.t_eat > 0 && data.t_eat <= INT_MAX)
-		|| !(data.t_sleep > 0 && data.t_sleep <= INT_MAX))
+		|| !(data.t_die >= 120 && data.t_die <= INT_MAX)
+		|| !(data.t_eat >= 60 && data.t_eat <= INT_MAX)
+		|| !(data.t_sleep >= 60 && data.t_sleep <= INT_MAX))
 	{
-		err_inc_parse("Number is too big");
+		err_inc_parse("Number is too big or too small");
 		return (false);
 	}
 	else if (len == 6)

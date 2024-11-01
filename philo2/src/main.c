@@ -6,7 +6,7 @@
 /*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 14:18:06 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/29 14:38:26 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/10/31 15:13:40 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,20 +59,14 @@ bool	init_data(t_data *data, char **av, int len)
 bool	check_input(char **av)
 {
 	int	i;
-	int	j;
 
 	i = 1;
 	while (av[i] != NULL)
 	{
-		j = 0;
-		while (av[i][j] != '\0')
+		if (!is_digit(av[i]))
 		{
-			if (!ft_isdigit(av[i][j]))
-			{
-				err_inc_parse("Non-numeric argument");
-				return (false);
-			}
-			j++;
+			err_inc_parse("Non-numeric argument");
+			return (false);
 		}
 		i++;
 	}

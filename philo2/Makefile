@@ -6,13 +6,13 @@
 #    By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/16 09:20:53 by hzakharc          #+#    #+#              #
-#    Updated: 2024/10/29 14:37:30 by hzakharc         ###   ########.fr        #
+#    Updated: 2024/11/01 14:10:32 by hzakharc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRC_DIR			=	src/
 
-SRC				=	$(SRC_DIR)/main.c $(SRC_DIR)/init.c\
+SRC				=	$(SRC_DIR)/main.c $(SRC_DIR)/init.c $(SRC_DIR)/util.c \
 
 OBJS			=	$(SRC:.c=.o)
 
@@ -23,7 +23,7 @@ YELLOW		=	\e[0;33m
 CYAN		=	\033[0;96m
 COLOR		=	\033[0m
 
-CC				=	@cc -Wall -Werror -Wextra -pthread #-fsanitize=thread
+CC				=	@cc -Wall -Werror -Wextra -pthread -fsanitize=thread
 RM				=	@rm -f
 
 NAME			=	philo

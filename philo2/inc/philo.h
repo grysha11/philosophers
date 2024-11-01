@@ -6,7 +6,7 @@
 /*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 14:17:19 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/29 14:17:28 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/11/01 12:30:58 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,5 +29,32 @@
 # define COLOR_BLUE "\033[1;34m"
 # define COLOR_PURPLE "\033[1;35m"
 # define COLOR_CYAN "\033[1;36m"
+
+//		init functions
+void	initialize(t_data *data);
+void	init_philos(t_data *data);
+void	init_mutexes(t_data *data);
+bool	join_threads(t_data *data);
+bool	create_threads(t_data *data);
+
+//		routine functions
+void	*routine(void *arg);
+bool	dead_check(t_philo *philo);
+bool	check_meals(t_data *data);
+
+//		instructions
+void	sleeep(t_philo *philo);
+void	eat(t_philo *philo);
+void	print_state(t_philo *philo, char *msg);
+
+//		forks
+bool	try_forks(t_philo *philo);
+bool	take_forks(t_fork *first, t_fork *second);
+
+//		utils
+size_t	get_time(void);
+int		ft_usleep(size_t time);
+bool	is_digit(char *str);
+int		ft_atoi(char *str);
 
 #endif

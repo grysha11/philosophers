@@ -6,7 +6,7 @@
 /*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 14:16:59 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/29 16:27:39 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/11/01 14:35:02 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ typedef struct s_philo
 	int				eat_c;
 	int				ready;
 	t_state			state;
-	t_fork			fork_l;
-	t_fork			fork_r;
+	t_fork			*fork_l;
+	t_fork			*fork_r;
 	size_t			start_t;
 	size_t			time_e;
 	pthread_t		thrd;

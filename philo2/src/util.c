@@ -6,7 +6,7 @@
 /*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 14:41:06 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/10/29 14:44:39 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/11/03 12:28:55 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,18 @@ int	ft_usleep(size_t time)
 	while ((get_time() - rn) < time)
 		usleep(time / 5);
 	return (0);
+}
+
+bool	check_podox(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->data->stop);
+	if (philo->data->exit == 1)
+	{
+		pthread_mutex_unlock(&philo->data->stop);
+		return (true);
+	}
+	pthread_mutex_unlock(&philo->data->stop);
+	return (false);
 }
 
 size_t	get_time(void)

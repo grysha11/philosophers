@@ -6,7 +6,7 @@
 /*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 14:16:59 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/11/01 14:35:02 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/11/02 14:16:18 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ typedef struct s_fork
 {
 	bool			taken;
 	int				id;
+	int				last;
 	pthread_mutex_t	mutex;
 }				t_fork;
 
@@ -58,6 +59,7 @@ typedef struct s_data
 	int				exit;
 	pthread_mutex_t	stop;
 	pthread_mutex_t	print;
+	pthread_mutex_t	end_c;
 	t_fork			forks[200];
 	t_philo			philos[200];
 }				t_data;

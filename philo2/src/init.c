@@ -6,7 +6,7 @@
 /*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 14:18:39 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/11/03 14:17:45 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/11/03 15:07:39 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ void	initialize(t_data *data)
 {
 	init_mutexes(data);
 	init_philos(data);
+	data->start_t = get_time();
 	if (!create_threads(data))
 	{
 		printf("error during initializing threads\n");

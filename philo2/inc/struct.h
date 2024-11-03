@@ -6,7 +6,7 @@
 /*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 14:16:59 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/11/02 14:16:18 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/11/03 15:07:16 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ typedef struct s_data
 	size_t			t_die;
 	size_t			t_eat;
 	size_t			t_sleep;
+	size_t			start_t;
 	int				cycle;
 	int				exit;
 	pthread_mutex_t	stop;

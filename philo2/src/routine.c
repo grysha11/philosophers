@@ -6,7 +6,7 @@
 /*   By: hzakharc < hzakharc@student.42wolfsburg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/03 12:23:29 by hzakharc          #+#    #+#             */
-/*   Updated: 2024/11/03 12:32:30 by hzakharc         ###   ########.fr       */
+/*   Updated: 2024/11/03 15:09:07 by hzakharc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,7 @@ void	*routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	philo->start_t = get_time();
-	philo->time_e = get_time();
+	philo->time_e = philo->data->start_t;
 	print_state(philo, "is thinking");
 	while (1)
 	{
@@ -104,7 +103,7 @@ void	*routine(void *arg)
 
 void	print_state(t_philo *philo, char *msg)
 {
-	const size_t	time = get_time() - philo->start_t;
+	const size_t	time = get_time() - philo->data->start_t;
 
 	pthread_mutex_lock(&philo->data->stop);
 	if (philo->data->exit == 1)
